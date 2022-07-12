@@ -1,5 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Transaction, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'relationships' do
+    it { should belong_to(:invoice) }
+
+    it { should have_many(:merchants).through(:invoices) }
+    it { should have_many(:customers).through(:invoices) }
+    it { should have_many(:invoice_items).through(:invoices) }
+
+    it { should have_many(:items).through(:merchants) }
+    it { should have_many(:items).through(:invoice_items) }
+  end
+
+  describe 'validations' do
+    it { should validate_presence_of(:credit_card_number) }
+    it { should validate_presence_of(:credit_card_expiration_date) }
+    it { should validate_presence_of(:result) }
+  end
 end
