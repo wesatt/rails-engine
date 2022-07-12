@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :merchant do
-    name { [Faker::Food.fruits, Faker::Company.industry].join(" ") }
+    name { [Faker::Food.fruits, Faker::Company.industry].join(' ') }
   end
 end

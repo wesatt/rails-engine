@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Invoice < ApplicationRecord
   belongs_to(:customer)
   belongs_to(:merchant)
@@ -6,5 +8,4 @@ class Invoice < ApplicationRecord
   has_many(:items, through: :invoice_items)
 
   validates_presence_of :status
-
 end
