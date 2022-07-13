@@ -173,4 +173,35 @@ RSpec.describe 'Items API', type: :request do
       end
     end
   end
+
+  describe 'Items_merchant#iindex' do
+    describe 'happy path, fetch one merchant by id' do
+      it 'shows the merchant for the item' do
+        get "/api/v1/items/#{items1[1].id}/merchant"
+
+        json = response.body
+
+        expect(response).to be_successful
+        expect(json[:data]).to include(:name)
+        expect(json[:data][:name]).to eq(merchant1.name)
+        expect(json[:data][:id]).to eq(merchant1.id)
+      end
+    end
+
+    describe 'sad path, bad integer id returns 404' do
+      it 'returns an error if id is invlaid' do
+        get '/api/v1/items/8923987297/merchant'
+
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    describe 'edge case, string id returns 404' do
+      it 'returns an error if id is string' do
+        get '/api/v1/items/one/merchant'
+
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end
