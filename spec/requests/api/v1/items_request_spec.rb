@@ -15,6 +15,7 @@ RSpec.describe "Items", type: :request do
       items = json[:data]
 
       expect(items.count).to eq(10)
+      expect(items.first[:attributes]).to include(:name, :description, :unit_price, :merchant_id)
     end
   end
 end
