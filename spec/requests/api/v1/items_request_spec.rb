@@ -85,4 +85,92 @@ RSpec.describe 'Items API', type: :request do
       end
     end
   end
+
+  describe 'Items#update' do
+    describe 'happy path, fetch one item by id' do
+      it "updates an item's attributes" do
+        item = create(:item, merchant: merchant1)
+        new_params = {
+          name: 'Whatsit',
+          description: 'A nice thing',
+          unit_price: 16.99,
+          merchant_id: merchant2.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: new_params)
+        new_properties = Item.find(item.id)
+
+        expect(response).to have_http_status(202)
+        expect(new_properties.name).to_not eq(item.name)
+        expect(new_properties.name).to eq(new_params[:name])
+        expect(new_properties.description).to_not eq(item.description)
+        expect(new_properties.description).to eq(new_params[:description])
+        expect(new_properties.unit_price).to_not eq(item.unit_price)
+        expect(new_properties.unit_price).to eq(new_params[:unit_price])
+        expect(new_properties.merchant_id).to_not eq(item.merchant_id)
+        expect(new_properties.merchant_id).to eq(new_params[:merchant_id])
+      end
+    end
+
+    describe 'happy path, works with only partial data, too' do
+      it "updates an item's attributes with partial data" do
+        item = create(:item, merchant: merchant1)
+        new_params = {
+          name: 'Whatsit'
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: new_params)
+        new_properties = Item.find(item.id)
+
+        expect(response).to have_http_status(202)
+        expect(new_properties.name).to_not eq(item.name)
+        expect(new_properties.name).to eq(new_params[:name])
+        expect(new_properties.description).to eq(item.description)
+        expect(new_properties.unit_price).to eq(item.unit_price)
+        expect(new_properties.merchant_id).to eq(item.merchant_id)
+      end
+    end
+
+    describe 'sad path, bad integer id returns 404' do
+      it 'returns error with invalid id' do
+        new_params = {
+          name: 'Whatsit'
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch '/api/v1/items/8923987297', headers: headers, params: JSON.generate(item: new_params)
+
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    describe 'edge case, string id returns 404' do
+      it 'returns error id id is string' do
+        new_params = {
+          name: 'Whatsit'
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch '/api/v1/items/one', headers: headers, params: JSON.generate(item: new_params)
+
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    describe 'edge case, bad merchant id returns 400 or 404' do
+      it 'returns error if merchant id is invalid' do
+        new_params = {
+          name: 'Whatsit',
+          merchant_id: 8_923_987_297
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch '/api/v1/items/one', headers: headers, params: JSON.generate(item: new_params)
+
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end
