@@ -57,7 +57,8 @@ RSpec.describe 'Items API', type: :request do
 
   describe 'Items#create and Items#destroy' do
     describe 'response should be okay to process' do
-      it 'creates an item' do
+      it 'creates and deletes an item' do
+        # creates an item
         new_item_params = {
           name: 'Whatsit',
           description: 'A nice thing',
@@ -74,10 +75,13 @@ RSpec.describe 'Items API', type: :request do
         expect(item.description).to eq(new_item_params[:description])
         expect(item.unit_price).to eq(new_item_params[:unit_price])
         expect(item.merchant_id).to eq(new_item_params[:merchant_id])
-      end
 
-      it 'deletes an item' do
-        # delete "/api/v1/items/#{tbd}"
+        # deletes an item
+        delete "/api/v1/items/#{item.id}"
+
+        expect(response).to have_http_status(200)
+        item2 = Item.last
+        expect(item2.name).to_not eq(new_item_params[:name])
       end
     end
   end
