@@ -5,6 +5,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      # namespace :merchants do
+      #   resources :find, controller: :search, only %i[index]
+      # end
+      # get '/merchants/find', 'search#index'
       resources :merchants, only: %i[index show] do
         resources :items, controller: :merchant_items, only: %i[index]
       end
