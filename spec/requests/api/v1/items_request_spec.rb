@@ -70,10 +70,10 @@ RSpec.describe 'Items API', type: :request do
         item = Item.last
 
         expect(response).to have_http_status(201)
-        expect(item.name).to eq(new_item[:name])
-        expect(item.decription).to eq(new_item[:description])
-        expect(item.unit_price).to eq(new_item[:unit_price])
-        expect(item.merchant_id).to eq(new_item[:merchant_id])
+        expect(item.name).to eq(new_item_params[:name])
+        expect(item.description).to eq(new_item_params[:description])
+        expect(item.unit_price).to eq(new_item_params[:unit_price])
+        expect(item.merchant_id).to eq(new_item_params[:merchant_id])
       end
 
       it 'deletes an item' do
