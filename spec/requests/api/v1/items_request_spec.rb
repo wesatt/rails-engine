@@ -54,4 +54,31 @@ RSpec.describe 'Items API', type: :request do
       end
     end
   end
+
+  describe 'Items#create and Items#destroy' do
+    describe 'response should be okay to process' do
+      it 'creates an item' do
+        new_item_params = {
+          name: 'Whatsit',
+          description: 'A nice thing',
+          unit_price: 16.99,
+          merchant_id: merchant1.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: new_item_params)
+        item = Item.last
+
+        expect(response).to have_http_status(201)
+        expect(item.name).to eq(new_item[:name])
+        expect(item.decription).to eq(new_item[:description])
+        expect(item.unit_price).to eq(new_item[:unit_price])
+        expect(item.merchant_id).to eq(new_item[:merchant_id])
+      end
+
+      it 'deletes an item' do
+        # delete "/api/v1/items/#{tbd}"
+      end
+    end
+  end
 end
