@@ -13,12 +13,10 @@ RSpec.describe 'ItemMerchant API', type: :request do
       it 'shows the merchant for the item' do
         get "/api/v1/items/#{items1[1].id}/merchant"
 
-        json = response.body
-
         expect(response).to be_successful
-        expect(json[:data]).to include(:name)
-        expect(json[:data][:name]).to eq(merchant1.name)
-        expect(json[:data][:id]).to eq(merchant1.id)
+        expect(json[:data]).to include(:id, :type, :attributes)
+        expect(json[:data][:attributes][:name]).to eq(merchant1.name)
+        expect(json[:data][:id].to_i).to eq(merchant1.id)
       end
     end
 
