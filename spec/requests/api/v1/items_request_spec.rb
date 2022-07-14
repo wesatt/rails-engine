@@ -101,7 +101,7 @@ RSpec.describe 'Items API', type: :request do
         patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: new_params)
         new_properties = Item.find(item.id)
 
-        expect(response).to have_http_status(202)
+        expect(response).to be_successful
         expect(new_properties.name).to_not eq(item.name)
         expect(new_properties.name).to eq(new_params[:name])
         expect(new_properties.description).to_not eq(item.description)
@@ -124,7 +124,7 @@ RSpec.describe 'Items API', type: :request do
         patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: new_params)
         new_properties = Item.find(item.id)
 
-        expect(response).to have_http_status(202)
+        expect(response).to be_successful
         expect(new_properties.name).to_not eq(item.name)
         expect(new_properties.name).to eq(new_params[:name])
         expect(new_properties.description).to eq(item.description)

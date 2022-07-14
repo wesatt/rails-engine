@@ -53,12 +53,15 @@ RSpec.describe 'Merchants API', type: :request do
         merchant_found = create(:merchant, name: 'Ring World')
         get '/api/v1/merchants/find?name=ring'
 
-        expect(response).to be_successful
         expect(json).to be_a(Hash)
-        expect(json.keys.count).to eq(3)
-        expect(json).to include(:id, :type, :attributes)
-        expect(json[:attributes]).to be_a(Hash)
-        expect(json[:attributes][:name]).to eq(merchant_found.name)
+
+        merchant_response = json[:data]
+
+        expect(response).to be_successful
+        expect(merchant_response.keys.count).to eq(3)
+        expect(merchant_response).to include(:id, :type, :attributes)
+        expect(merchant_response[:attributes]).to be_a(Hash)
+        expect(merchant_response[:attributes][:name]).to eq(merchant_found.name)
       end
     end
 
@@ -66,12 +69,12 @@ RSpec.describe 'Merchants API', type: :request do
       it 'will return' do
         get '/api/v1/merchants/find?name=zzyzx'
 
-        expect(response).to be_successful
         expect(json).to be_a(Hash)
-        expect(json.keys.count).to eq(3)
-        expect(json).to include(:id, :type, :attributes)
-        expect(json[:attributes]).to be_a(Hash)
-        expect(json[:attributes][:name]).to eq(merchant_found.name)
+
+        merchant_response = json[:data]
+
+        expect(response).to be_successful
+        expect(merchant_response).to eq({})
       end
     end
   end
