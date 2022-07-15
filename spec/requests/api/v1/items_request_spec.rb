@@ -272,7 +272,6 @@ RSpec.describe 'Items API', type: :request do
           expect(results[:data].empty?).to eq(true)
           expect(results[:data]).to be_empty
 
-
           get '/api/v1/items/find_all'
           expect(response).to be_successful
           results = json
