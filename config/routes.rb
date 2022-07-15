@@ -16,6 +16,10 @@ Rails.application.routes.draw do
         resources :items, controller: :merchant_items, only: %i[index]
       end
 
+      namespace :items do
+        # resources :find, controller: :search, only: %i[index]
+        get 'find_all', to: 'search#index'
+      end
       resources :items, only: %i[index show create destroy update] do
         resources :merchant, controller: :item_merchant, only: %i[index]
       end
