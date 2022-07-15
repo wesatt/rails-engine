@@ -162,13 +162,14 @@ RSpec.describe 'Items API', type: :request do
 
       describe 'edge case, bad merchant id returns 400 or 404' do
         it 'returns error if merchant id is invalid' do
+          item = create(:item, merchant: merchant1)
           new_params = {
             name: 'Whatsit',
             merchant_id: 8_923_987_297
           }
           headers = { 'CONTENT_TYPE' => 'application/json' }
 
-          patch '/api/v1/items/one', headers: headers, params: JSON.generate(item: new_params)
+          patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: new_params)
 
           expect(response).to have_http_status(404)
         end
