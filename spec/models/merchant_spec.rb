@@ -14,4 +14,20 @@ RSpec.describe Merchant, type: :model do
   describe 'validations' do
     it { should validate_presence_of(:name) }
   end
+
+  describe 'class methods' do
+    describe '#find_by_name(name_search)' do
+      it 'returns records alphabetically that match the search params' do
+        merch1 = create(:merchant, name: 'Turing')
+        merch2 = create(:merchant, name: 'Ring World')
+        expect(Merchant.find_by_name('ring')).to eq([merch2, merch1])
+      end
+
+      it 'returns an array with nil if the params are nil' do
+        create(:merchant, name: 'Turing')
+        create(:merchant, name: 'Ring World')
+        expect(Merchant.find_by_name(nil)).to eq([nil])
+      end
+    end
+  end
 end
