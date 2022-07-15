@@ -20,13 +20,13 @@ module Api
       def destroy
         item = Item.find(params[:id])
         Item.destroy(params[:id])
-        render json: ItemSerializer.new(item)#, status: :ok
+        render json: ItemSerializer.new(item) # , status: :ok
       end
 
       def update
         item = Item.find(params[:id])
         if item.update(item_params)
-          render json: ItemSerializer.new(item)#, status: :accepted
+          render json: ItemSerializer.new(item) # , status: :accepted
         else
           render json: ItemSerializer.new(item), status: :not_found
         end

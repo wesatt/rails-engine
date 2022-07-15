@@ -173,4 +173,91 @@ RSpec.describe 'Items API', type: :request do
       end
     end
   end
+
+  describe 'Items#find_all' do
+    describe 'happy path, fetch all items matching a pattern' do
+      xit 'returns all items that match the given criteria' do
+        item1 = create(:item, name: 'Wild Rice', unit_price: 9.50, merchant_id: merchant1.id)
+        item2 = create(:item, name: 'White Rice', unit_price: 10.50, merchant_id: merchant2.id)
+        item3 = create(:item, name: 'Brown Rice', unit_price: 5.50, merchant_id: merchant2.id)
+        item4 = create(:item, name: 'Kodama Charm', unit_price: 16.50, merchant_id: merchant1.id)
+        item5 = create(:item, name: 'Price Checker', unit_price: 10.00, merchant_id: merchant1.id)
+
+        get '/api/v1/items/find?name=rice'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+
+        get '/api/v1/items/find?min_price=10'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+
+        get '/api/v1/items/find?max_price=10'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+
+        get '/api/v1/items/find?max_price=20&min_price=10'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+      end
+    end
+    describe 'sad path, no fragment matched' do
+      xit 'returns an empty array when there is invalid, missing, or unmatched data' do
+        item1 = create(:item, name: 'Wild Rice', unit_price: 9.50, merchant_id: merchant1.id)
+        item2 = create(:item, name: 'White Rice', unit_price: 10.50, merchant_id: merchant2.id)
+        item3 = create(:item, name: 'Brown Rice', unit_price: 5.50, merchant_id: merchant2.id)
+        item4 = create(:item, name: 'Kodama Charm', unit_price: 16.50, merchant_id: merchant1.id)
+        item5 = create(:item, name: 'Price Checker', unit_price: 10.00, merchant_id: merchant1.id)
+
+        get '/api/v1/items/find?name=xxyzx'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+        expect(results[:data].empty?).to eq(true)
+        expect(results[:data]).to be_empty
+
+        get '/api/v1/items/find?min_price=99'
+        get '/api/v1/items/find?max_price=1'
+        get '/api/v1/items/find?max_price=30&min_price=20'
+
+        get '/api/v1/items/find'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+        expect(results[:data].empty?).to eq(true)
+        expect(results[:data]).to be_empty
+
+        get '/api/v1/items/find?name='
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+        expect(results[:data].empty?).to eq(true)
+        expect(results[:data]).to be_empty
+
+        get '/api/v1/items/find?name=rice&min_price=10'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+        expect(results[:data].empty?).to eq(true)
+        expect(results[:data]).to be_empty
+
+        get '/api/v1/items/find?name=rice&max_price=10'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+        expect(results[:data].empty?).to eq(true)
+        expect(results[:data]).to be_empty
+
+        get '/api/v1/items/find?name=rice&min_price=10&max_price=20'
+        expect(response).to be_successful
+        results = json
+        expect(results[:data]).to be_a(Array)
+        expect(results[:data].empty?).to eq(true)
+        expect(results[:data]).to be_empty
+      end
+    end
+  end
 end
