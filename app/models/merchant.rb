@@ -16,4 +16,13 @@ class Merchant < ApplicationRecord
       Merchant.where('name ILIKE ?', "%#{name_input}%").order(:name)
     end
   end
+
+  def self.top_merchants_by_qty(quantity)
+    joins(invoices: %i[invoice_items transactions])
+      .where(transactions: { result: 'success' }, invoices: { status: 'shipped' })
+      .select(:name, :id, 'SUM(invoice_items.quantity * invoice_items.unit_price) as revenue')
+      .group(:id)
+      .order(revenue: :desc)
+      .limit(quantity)
+  end
 end

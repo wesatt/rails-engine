@@ -9,11 +9,16 @@ Rails.application.routes.draw do
         # resources :find, controller: :search, only: %i[index]
         get 'find', to: 'search#index'
       end
+
       resources :merchants, only: %i[index show] do
         # collection do
         #   get 'find', to: 'search#index'
         # end
         resources :items, controller: :merchant_items, only: %i[index]
+      end
+
+      namespace :revenue do
+        resources :merchants, only: %i[index]
       end
 
       namespace :items do

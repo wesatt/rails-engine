@@ -5,6 +5,10 @@ class MerchantSerializer
   attributes :name
   # has_many :items
 
+  # attributes :revenue do |merchant|
+  #   merchant.revenue
+  # end
+
   def self.format_merchants(merchants)
     {
       data: merchants.map do |merchant|

@@ -29,10 +29,10 @@ RSpec.describe Item, type: :model do
         item3 = create(:item, name: 'Brown Rice', unit_price: 5.50, merchant_id: merchant2.id)
         item4 = create(:item, name: 'Kodama Charm', unit_price: 16.50, merchant_id: merchant1.id)
         item5 = create(:item, name: 'Price Checker', unit_price: 10.00, merchant_id: merchant1.id)
-        name_only = {name: 'rice'}
-        min_only = {min_price: 10}
-        max_only = {max_price: 10}
-        min_and_max = {min_price: 9, max_price: 20}
+        name_only = { name: 'rice' }
+        min_only = { min_price: 10 }
+        max_only = { max_price: 10 }
+        min_and_max = { min_price: 9, max_price: 20 }
 
         expect(Item.find_all(name_only)).to eq([item3, item5, item2, item1])
         expect(Item.find_all(min_only)).to eq([item2, item4, item5])
